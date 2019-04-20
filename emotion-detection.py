@@ -4,6 +4,11 @@ import argparse
 import face_recognition
 import mvnc.mvncapi as mvnc
 
+# TODO
+# Reduce sampling rate for inference ONLY using global variable
+# Add to array of past 5/10 inference results if prediction probability > threshold
+# Perform specific action if array results match certain values
+
 # Construct the argument parser with default values
 parser = argparse.ArgumentParser()
 parser.add_argument("-t", "--test", type=bool, default=False,
