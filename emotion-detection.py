@@ -5,9 +5,9 @@ import face_recognition
 import mvnc.mvncapi as mvnc
 
 # TODO
-# Reduce sampling rate for inference ONLY using global variable
-# Add to array of past 5/10 inference results if prediction probability > threshold
-# Perform specific action if array results match certain values
+# Only add to past result list if confidence is above 75% threshold
+# Use arguments to define size of past result list
+# Play music when road rage is detected
 
 # Construct the argument parser with default values
 parser = argparse.ArgumentParser()
@@ -15,12 +15,15 @@ parser.add_argument("-t", "--test", type=bool, default=False,
                     help="Will not connect to Movidius NCS if test mode is True")
 parser.add_argument("-g", "--graph", type=str, default="graph/emotiongraph",
                     help="Path to neural network graph")
+parser.add_argument("-s", "--samplerate", type=int, default=10, help="Sampling rate")
 ARGS = parser.parse_args()
 
 # Initialize some variables
 in_test_mode = ARGS.test
-sample_rate = 1
+sample_rate = ARGS.samplerate
+count = 1
 face_locations = []
+past_results = []
 process_this_frame = True
 NETWORK_HEIGHT = 224
 NETWORK_WIDTH = 224
@@ -76,9 +79,9 @@ while True:
         # Resize image [Image size if defined by choosen network, during training]
         img = cv2.resize(img, (NETWORK_HEIGHT, NETWORK_WIDTH))
         # Increment sample_rate for inference
-        sample_rate += 1
+        count += 1
         # Read & print inference results from the NCS
-        if not in_test_mode and sample_rate == 5:
+        if not in_test_mode and count == sample_rate:
             labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
             # Load the image as a half-precision floating point array
             graph.queue_inference_with_fifo_elem(fifo_in, fifo_out, img.astype(numpy.float32), None)
@@ -87,10 +90,22 @@ while True:
             # Find the index of highest confidence
             top_prediction = output.argmax()
             # Get execution time
-            inference_time = graph.get_option(mvnc.GraphOption.RO_TIME_TAKEN)
+            # inference_time = graph.get_option(mvnc.GraphOption.RO_TIME_TAKEN)
 
-            print("I am %3.1f%%" % (100.0 * output[top_prediction]) + " confident you are " + labels[top_prediction] + " ( %.2f ms )" % (numpy.sum(inference_time)))
-            sample_rate = 1
+            # print("I am %3.1f%%" % (100.0 * output[top_prediction]) + " confident you are " + labels[top_prediction] + " ( %.2f ms )" % (numpy.sum(inference_time)))
+
+            if len(past_results) > 9:
+                past_results.pop(0)
+            past_results.append(labels[top_prediction])
+
+            print(past_results)
+
+            if len(past_results) > 5:
+                if (all(x == "angry" for x in past_results)):
+                    print("!!!CALM DOWN!!!ROAD RAGE DETECTED!!! lol")
+
+            # Reset count
+            count = 1
 
     process_this_frame = not process_this_frame
 
