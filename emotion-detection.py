@@ -12,13 +12,14 @@ import mvnc.mvncapi as mvnc
 # Construct the argument parser with default values
 parser = argparse.ArgumentParser()
 parser.add_argument("-t", "--test", type=bool, default=False,
-	help="Will not connect to Movidius NCS if test mode is True")
+                    help="Will not connect to Movidius NCS if test mode is True")
 parser.add_argument("-g", "--graph", type=str, default="graph/emotiongraph",
-	help="Path to neural network graph")
+                    help="Path to neural network graph")
 ARGS = parser.parse_args()
 
 # Initialize some variables
 in_test_mode = ARGS.test
+sample_rate = 1
 face_locations = []
 process_this_frame = True
 NETWORK_HEIGHT = 224
@@ -31,22 +32,22 @@ video_capture = cv2.VideoCapture(0)
 if not in_test_mode:
     # Look for enumerated NCS device(s); quit program if none found.
     devices = mvnc.enumerate_devices()
-    if len( devices ) == 0:
-        print( "No devices found" )
+    if len(devices) == 0:
+        print("No devices found")
         quit()
     # Get a handle to the first enumerated device and open it
-    device = mvnc.Device( devices[0] )
+    device = mvnc.Device(devices[0])
     device.open()
 
 # Load the inference graph file onto the NCS device
 if not in_test_mode:
     # Read the graph file into a buffer
-    with open( ARGS.graph, mode='rb' ) as f:
+    with open(ARGS.graph, mode='rb') as f:
         blob = f.read()
 
     # Load the graph buffer into the NCS
-    graph = mvnc.Graph( ARGS.graph )
-        # Set up fifos
+    graph = mvnc.Graph(ARGS.graph)
+    # Set up fifos
     fifo_in, fifo_out = graph.allocate_with_fifos(device, blob)
 
 while True:
@@ -71,25 +72,27 @@ while True:
             bottom *= 4
             left *= 4
             # Get the box around the face
-            img = frame[ top : bottom, left : right ]
+            img = frame[top:bottom, left:right]
         # Resize image [Image size if defined by choosen network, during training]
-        img = cv2.resize( img, (NETWORK_HEIGHT, NETWORK_WIDTH) )
+        img = cv2.resize(img, (NETWORK_HEIGHT, NETWORK_WIDTH))
+        # Increment sample_rate for inference
+        sample_rate += 1
         # Read & print inference results from the NCS
-        if not in_test_mode:
+        if not in_test_mode and sample_rate == 5:
             labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
             # Load the image as a half-precision floating point array
-            graph.queue_inference_with_fifo_elem( fifo_in, fifo_out, img.astype(numpy.float32), None )
+            graph.queue_inference_with_fifo_elem(fifo_in, fifo_out, img.astype(numpy.float32), None)
             # Get the results from NCS
             output, userobj = fifo_out.read_elem()
             # Find the index of highest confidence
             top_prediction = output.argmax()
             # Get execution time
-            inference_time = graph.get_option( mvnc.GraphOption.RO_TIME_TAKEN )
-            
-            print(  "I am %3.1f%%" % (100.0 * output[top_prediction] ) + " confident you are " + labels[top_prediction] + " ( %.2f ms )" % ( numpy.sum( inference_time ) ) )
+            inference_time = graph.get_option(mvnc.GraphOption.RO_TIME_TAKEN)
+
+            print("I am %3.1f%%" % (100.0 * output[top_prediction]) + " confident you are " + labels[top_prediction] + " ( %.2f ms )" % (numpy.sum(inference_time)))
+            sample_rate = 1
 
     process_this_frame = not process_this_frame
-
 
     # Display the results
     for (top, right, bottom, left) in face_locations:
