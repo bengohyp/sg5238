@@ -5,8 +5,6 @@ import face_recognition
 import mvnc.mvncapi as mvnc
 
 # TODO
-# Only add to past result list if confidence is above 75% threshold
-# Use arguments to define size of past result list
 # Play music when road rage is detected
 
 # Construct the argument parser with default values
@@ -15,12 +13,13 @@ parser.add_argument("-t", "--test", type=bool, default=False,
                     help="Will not connect to Movidius NCS if test mode is True")
 parser.add_argument("-g", "--graph", type=str, default="graph/emotiongraph",
                     help="Path to neural network graph")
-parser.add_argument("-s", "--samplerate", type=int, default=10, help="Sampling rate")
 ARGS = parser.parse_args()
 
 # Initialize some variables
 in_test_mode = ARGS.test
-sample_rate = ARGS.samplerate
+sample_rate = 10
+moving_window_size = 10
+confidence_threshold = 0.75
 count = 1
 face_locations = []
 past_results = []
@@ -94,13 +93,15 @@ while True:
 
             # print("I am %3.1f%%" % (100.0 * output[top_prediction]) + " confident you are " + labels[top_prediction] + " ( %.2f ms )" % (numpy.sum(inference_time)))
 
-            if len(past_results) > 9:
+            if len(past_results) > moving_window_size:
                 past_results.pop(0)
-            past_results.append(labels[top_prediction])
+            print(output[top_prediction])
+            if output[top_prediction] > confidence_threshold:
+                past_results.append(labels[top_prediction])
 
             print(past_results)
 
-            if len(past_results) > 5:
+            if len(past_results) > moving_window_size - 1:
                 if (all(x == "angry" for x in past_results)):
                     print("!!!CALM DOWN!!!ROAD RAGE DETECTED!!! lol")
 
