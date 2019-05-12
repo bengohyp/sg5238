@@ -95,7 +95,6 @@ while True:
 
             if len(past_results) > moving_window_size:
                 past_results.pop(0)
-            print(output[top_prediction])
             if output[top_prediction] > confidence_threshold:
                 past_results.append(labels[top_prediction])
 
@@ -105,7 +104,7 @@ while True:
                 if (all(x == "angry" for x in past_results)):
                     if not pygame.mixer.get_busy():
                         channel1 = calm_music.play()
-                    print("!!!CALM DOWN!!!ROAD RAGE DETECTED!!! lol")
+                        print("Road rage detected! Playing calming music in the background")
 
             # Reset count
             count = 1
