@@ -1,11 +1,9 @@
 import cv2
 import numpy
+import pygame
 import argparse
 import face_recognition
 import mvnc.mvncapi as mvnc
-
-# TODO
-# Play music when road rage is detected
 
 # Construct the argument parser with default values
 parser = argparse.ArgumentParser()
@@ -26,6 +24,8 @@ past_results = []
 process_this_frame = True
 NETWORK_HEIGHT = 224
 NETWORK_WIDTH = 224
+pygame.init()
+calm_music = pygame.mixer.Sound("calm_30s.wav")
 
 # Get a reference to webcam #0 (the default one)
 video_capture = cv2.VideoCapture(0)
@@ -103,6 +103,8 @@ while True:
 
             if len(past_results) > moving_window_size - 1:
                 if (all(x == "angry" for x in past_results)):
+                    if not pygame.mixer.get_busy():
+                        channel1 = calm_music.play()
                     print("!!!CALM DOWN!!!ROAD RAGE DETECTED!!! lol")
 
             # Reset count

@@ -2,7 +2,9 @@
 
 ## Implementing emotion detection for driver safety
 
-Using the Movidius NCS to perform analysis of webcam streams on edge devices.
+Using the Movidius NCS to perform analysis of webcam streams on edge devices to detect road rage.
+
+When a driver is detected to be consistently angry over a period of time, calming music is played to reduce the driver's anger.
 
 ## Project Deliverables
 
@@ -16,9 +18,3 @@ Using the Movidius NCS to perform analysis of webcam streams on edge devices.
 Submission deadline: __30 May 2019 23:59hrs__
 
 Return MVNCS on __19 June 2019__
-
-## Report
-
-## Caffe Model and compiled Graph file
-
-## References
