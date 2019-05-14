@@ -74,9 +74,9 @@ while True:
             bottom *= 4
             left *= 4
             # Get the box around the face
-            img = frame[top:bottom, left:right]
+            img1 = frame[top:bottom, left:right]
         # Resize image [Image size if defined by choosen network, during training]
-        img = cv2.resize(img, (NETWORK_HEIGHT, NETWORK_WIDTH))
+        img = cv2.resize(img1, (NETWORK_HEIGHT, NETWORK_WIDTH))
         # Increment sample_rate for inference
         count += 1
         # Read & print inference results from the NCS
