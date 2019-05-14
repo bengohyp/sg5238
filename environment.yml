@@ -1,0 +1,13 @@
+name: emo_detect
+channels:
+  - defaults
+dependencies:
+  - python=3.6
+  - pip
+  - numpy
+  - opencv
+  - pillow
+  - pip:
+      - face_recognition
+      - argparse
+      - pygame

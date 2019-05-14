@@ -81,9 +81,11 @@ while True:
         count += 1
         # Read & print inference results from the NCS
         if not in_test_mode and count == sample_rate:
-            labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+            labels = ['angry', 'disgust', 'fear',
+                      'happy', 'neutral', 'sad', 'surprise']
             # Load the image as a half-precision floating point array
-            graph.queue_inference_with_fifo_elem(fifo_in, fifo_out, img.astype(numpy.float32), None)
+            graph.queue_inference_with_fifo_elem(
+                fifo_in, fifo_out, img.astype(numpy.float32), None)
             # Get the results from NCS
             output, userobj = fifo_out.read_elem()
             # Find the index of highest confidence
@@ -104,7 +106,8 @@ while True:
                 if (all(x == "angry" for x in past_results)):
                     if not pygame.mixer.get_busy():
                         channel1 = calm_music.play()
-                        print("Road rage detected! Playing calming music in the background")
+                        print(
+                            "Road rage detected! Playing calming music in the background")
 
             # Reset count
             count = 1

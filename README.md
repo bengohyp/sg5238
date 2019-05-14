@@ -6,11 +6,29 @@ Using the Movidius NCS to perform analysis of webcam streams on edge devices to 
 
 When a driver is detected to be consistently angry over a period of time, calming music is played to reduce the driver's anger.
 
-## Instructions
+## Instruction
 1. Clone the repository from Github
    ``` bash
    git clone https://github.com/bengohyp/sg5238.git
    ```
+1. Ensure your environment is right. There are two methods to do so:
+    1. by [Anaconda](https://anaconda.org/anaconda/python)
+    ```bash
+    cd sg5238
+    conda env create -f=environment.yml
+    source activate emo_detect
+    ```
+    2. by native pip (get [Python](https://www.python.org/downloads/))
+    ```bash
+    cd sg5238
+    python -m venv env # Creates virtual environment
+    source env/bin/activate
+    pip install -r requirements.txt
+    ```
+1. Get Intel® Movidius™ Neural Compute SDK
+ ```bash
+ git clone -b ncsdk2 http://github.com/Movidius/ncsdk && cd ncsdk && make install
+ ```
 1. Make sure your webcam and Movidius stick is connected to your computer. (optional) You can test the Movidius stick by opening terminal and executing 
    ```
    make test-ncs

@@ -1,0 +1,8 @@
+python=3.6
+pip
+numpy
+face_recognition
+argparse
+pygame
+opencv
+pillow
