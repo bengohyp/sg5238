@@ -6,6 +6,24 @@ Using the Movidius NCS to perform analysis of webcam streams on edge devices to 
 
 When a driver is detected to be consistently angry over a period of time, calming music is played to reduce the driver's anger.
 
+## Fresh install steps
+cd ~
+mkdir workspace
+cd workspace
+sudo apt install python-pip
+pip install virtualenv
+virtualenv env
+source env/bin/activate
+sudo apt-get install git
+git clone -b ncsdk2 http://github.com/Movidius/ncsdk && cd ncsdk && make install
+cd ..
+unzip sg5238.zip
+cd sg5238
+pip3 install -r requirements.txt
+make run
+
+https://movidius.github.io/ncsdk/vm_config.html
+
 ## Instruction
 1. Clone the repository from Github
    ``` bash
