@@ -16,7 +16,7 @@ ARGS = parser.parse_args()
 # Initialize some variables
 in_test_mode = ARGS.test
 sample_rate = 10
-moving_window_size = 10
+moving_window_size = 6
 confidence_threshold = 0.75
 count = 1
 face_locations = []
@@ -67,6 +67,7 @@ while True:
         # Find all the faces and face encodings in the current frame of video
         face_locations = face_recognition.face_locations(rgb_small_frame)
         # Get the image box around the detected face
+        img1 = numpy.zeros(small_frame.shape)
         for (top, right, bottom, left) in face_locations:
             # Scale back up face locations
             top *= 4
