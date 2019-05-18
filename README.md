@@ -1,26 +1,72 @@
 # SG5238 Architecting IOT Solutions CA2
 
-## Implementing emotion detection for driver safety
+# Implementing emotion detection for driver safety
 
-Using the Movidius NCS to perform analysis of webcam streams on edge devices to detect road rage.
+This project aims to use the Movidius NCS to perform analysis of webcam streams on edge devices to detect road rage. When a driver is detected to be consistently angry over a period of time, calming music is played to reduce the driver's anger.
 
-When a driver is detected to be consistently angry over a period of time, calming music is played to reduce the driver's anger.
+## Getting Started
 
-## Fresh install steps
-cd ~
-mkdir workspace
-cd workspace
-sudo apt install python-pip
-pip install virtualenv
-virtualenv env
-source env/bin/activate
-sudo apt-get install git
-git clone -b ncsdk2 http://github.com/Movidius/ncsdk && cd ncsdk && make install
-cd ..
-unzip sg5238.zip
-cd sg5238
-pip3 install -r requirements.txt
-make run
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+You will need:
+- VirtualBox
+- Ubuntu 16.04 ISO
+- Intel® Movidius™ Neural Compute Stick (NCS)
+
+### Installing
+
+1. Install VirtualBox and create a new virtual machine with the Ubuntu 16.04 ISO. Instructions on how to set up a can be found [here](https://itsfoss.com/install-linux-in-virtualbox/).
+1. After starting up the VM, start a terminal instance by pressing `Ctrl+Alt+T` on the keyboard.
+1. In the terminal, execute these commands to install pip.
+   ```bash
+   cd ~ # navigate to the user's home directory
+   mkdir workspace # create a directory named 'workspace'
+   cd workspace # navigate to the 'workspace' directory
+   sudo apt install python-pip # install pip
+   ```
+1. Virtualenv is a tool to create isolated Python environments as best practice. Execute these commands to set up a virtualenv for this project.
+   ```bash
+   pip install virtualenv # install virtualenv
+   virtualenv env # create a new virtual environment for our project
+   source env/bin/activate # activate the newly created virtual environment
+   ```
+1. Execute these commands to install the Intel® Movidius™ SDK
+   ```bash   
+   sudo apt-get install git # install git
+   git clone -b ncsdk2 http://github.com/Movidius/ncsdk && cd ncsdk && make install # install the movidius sdk
+   ```
+1. Execute these commands to extract our source code and install the required dependencies (this step takes ~15mins to complete)
+   ```bash
+   cd .. # navigate back to the 'workspace' directory
+   unzip sg5238.zip # unzip our project source code
+   cd sg5238 # navigate to the sg5238 directory
+   pip3 install -r requirements.txt # install dependencies
+   ```
+
+## Testing the hardware
+
+7. Ensure that the Intel® Movidius™ NCS is plugged in and recognised by the VM. To test if the NCS is connected, run:
+   ```bash
+   make test-ncs # run hello_ncs_py example
+   ```
+
+## Running the application
+
+8. If the above test is successful, run the application with:
+   ```bash
+   make run # run the application
+   ```
+   A window showing the webcam output will appear on screen. In the terminal, an array of inference results will be printed. 
+
+### Inference results
+
+9. When the array results consist entirely `'angry'` inferences, music will be played in the background for 30 seconds. 
+10. At any time, you can press the `q` key to stop the application.
+
+
+# 
 
 https://movidius.github.io/ncsdk/vm_config.html
 
