@@ -70,7 +70,7 @@ You will need:
 
 https://movidius.github.io/ncsdk/vm_config.html
 
-## Instruction
+## Instructions (Renjie)
 1. Clone the repository from Github
    ``` bash
    git clone https://github.com/bengohyp/sg5238.git
@@ -109,7 +109,7 @@ https://movidius.github.io/ncsdk/vm_config.html
 1. If the confidence of the inferred emotion is over a set threshold, it will be added to a moving window.
 1. When all elements of the moving window is "angry", music will be played in the backround to calm the driver down.
 
-## Known Bug
+## Known Bug (fixed)
 - When executing ```make run```, a ```NameError: name 'img' is not defined``` error might sometimes appear. To resolve this error:
 1. Comment the line that is causing error
    ```python
@@ -127,11 +127,11 @@ https://movidius.github.io/ncsdk/vm_config.html
 
 ## Project Deliverables
 
-- [ ] 1 Report in .docx or .pdf format
-- [ ] 1 softcopy of source code in GitHub
-- [ ] 1 page PPT advertisement
+- [x] 1 Report in .docx or .pdf format
+- [ ] 1 softcopy of source code in zip file
+- [x] 1 page PPT advertisement
     \- Suggest using [___Canva___](https://www.canva.com/) to design the advertising poster
-- [ ] 1 demo video on YouTube demonstrating source code
+- [x] 1 demo video on YouTube demonstrating source code
 - [ ] 1 zip file containing all documents
 
 Submission deadline: __30 May 2019 23:59hrs__
