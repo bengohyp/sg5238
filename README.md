@@ -128,11 +128,11 @@ https://movidius.github.io/ncsdk/vm_config.html
 ## Project Deliverables
 
 - [x] 1 Report in .docx or .pdf format
-- [ ] 1 softcopy of source code in zip file
+- [x] 1 softcopy of source code in zip file
 - [x] 1 page PPT advertisement
     \- Suggest using [___Canva___](https://www.canva.com/) to design the advertising poster
 - [x] 1 demo video on YouTube demonstrating source code
-- [ ] 1 zip file containing all documents
+- [x] 1 zip file containing all documents
 
 Submission deadline: __30 May 2019 23:59hrs__
 
